@@ -1,0 +1,35 @@
+<h1>{{title}}</h1>
+ <div>
+  <select [(ngModel)]='selection'>
+    <option *ngFor="let option of options" [value]="option.id">
+      {{option.text}}
+    </option>
+  </select>
+  <br><br>
+  <button mat-raised-button color="primary" id="firstbutton" (click)="onSubmit()">Generate</button>
+  <button mat-button color="accent" id="secondbutton" (click)="downloadRequest(1)">Download PDF</button>
+  <button mat-button color="accent" id="thirdbutton" (click)="downloadRequest(2)">Download Word</button>
+</div>
+<div *ngIf="chart" class="reportChart">
+  <canvas id="canvas" >{{chart}}</canvas>
+  <br><br>
+</div>
+<div *ngIf="cities">
+  <div class="priceTable">
+    <div *ngFor="let item of cities">
+      <table class="container" id="customers"> 
+        <caption><strong>{{item.CityName}}</strong> (Average: R{{item.AveragePrice}} )</caption>
+        <tr>
+          <th>Car</th>
+          <th>Price</th>
+        </tr>
+        <tr *ngFor="let price of item.CarPrices">
+          <td>{{price.Car}}</td>
+          <td>{{price.Price}}</td>
+        </tr>
+      </table>
+      <br>
+      <br>
+    </div>
+  </div>
+</div>

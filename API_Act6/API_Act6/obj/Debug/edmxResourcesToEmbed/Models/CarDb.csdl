@@ -1,0 +1,148 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="CarDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Car">
+    <Key>
+      <PropertyRef Name="CarID" />
+    </Key>
+    <Property Name="CarID" Type="Int32" Nullable="false" />
+    <Property Name="CarName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="CarModel" Type="Int32" />
+    <Property Name="CarMake" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="CarPrices" Relationship="Self.FK__CarPrice__CarID__3F466844" FromRole="Car" ToRole="CarPrice" />
+  </EntityType>
+  <EntityType Name="CarPrice">
+    <Key>
+      <PropertyRef Name="CarPriceID" />
+    </Key>
+    <Property Name="CarPriceID" Type="Int32" Nullable="false" />
+    <Property Name="Price" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="CityID" Type="Int32" />
+    <Property Name="CarID" Type="Int32" />
+    <NavigationProperty Name="Car" Relationship="Self.FK__CarPrice__CarID__3F466844" FromRole="CarPrice" ToRole="Car" />
+    <NavigationProperty Name="City" Relationship="Self.FK__CarPrice__CityID__3E52440B" FromRole="CarPrice" ToRole="City" />
+  </EntityType>
+  <EntityType Name="City">
+    <Key>
+      <PropertyRef Name="CityID" />
+    </Key>
+    <Property Name="CityID" Type="Int32" Nullable="false" />
+    <Property Name="CityName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="ProvinceID" Type="Int32" />
+    <NavigationProperty Name="CarPrices" Relationship="Self.FK__CarPrice__CityID__3E52440B" FromRole="City" ToRole="CarPrice" />
+    <NavigationProperty Name="Province" Relationship="Self.FK__City__ProvinceID__3B75D760" FromRole="City" ToRole="Province" />
+    <NavigationProperty Name="OnlineSale" Relationship="Self.FK__OnlineSal__CityI__4222D4EF" FromRole="City" ToRole="OnlineSale" />
+    <NavigationProperty Name="OnsiteSale" Relationship="Self.FK__OnsiteSal__CityI__44FF419A" FromRole="City" ToRole="OnsiteSale" />
+  </EntityType>
+  <EntityType Name="OnlineSale">
+    <Key>
+      <PropertyRef Name="CityID" />
+    </Key>
+    <Property Name="CityID" Type="Int32" Nullable="false" />
+    <Property Name="link" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="City" Relationship="Self.FK__OnlineSal__CityI__4222D4EF" FromRole="OnlineSale" ToRole="City" />
+  </EntityType>
+  <EntityType Name="OnsiteSale">
+    <Key>
+      <PropertyRef Name="CityID" />
+    </Key>
+    <Property Name="CityID" Type="Int32" Nullable="false" />
+    <Property Name="OnsiteLocation" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="City" Relationship="Self.FK__OnsiteSal__CityI__44FF419A" FromRole="OnsiteSale" ToRole="City" />
+  </EntityType>
+  <EntityType Name="Province">
+    <Key>
+      <PropertyRef Name="ProvinceID" />
+    </Key>
+    <Property Name="ProvinceID" Type="Int32" Nullable="false" />
+    <Property Name="ProvinceName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Cities" Relationship="Self.FK__City__ProvinceID__3B75D760" FromRole="Province" ToRole="City" />
+  </EntityType>
+  <Association Name="FK__CarPrice__CarID__3F466844">
+    <End Role="Car" Type="Self.Car" Multiplicity="0..1" />
+    <End Role="CarPrice" Type="Self.CarPrice" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Car">
+        <PropertyRef Name="CarID" />
+      </Principal>
+      <Dependent Role="CarPrice">
+        <PropertyRef Name="CarID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__CarPrice__CityID__3E52440B">
+    <End Role="City" Type="Self.City" Multiplicity="0..1" />
+    <End Role="CarPrice" Type="Self.CarPrice" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="City">
+        <PropertyRef Name="CityID" />
+      </Principal>
+      <Dependent Role="CarPrice">
+        <PropertyRef Name="CityID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__City__ProvinceID__3B75D760">
+    <End Role="Province" Type="Self.Province" Multiplicity="0..1" />
+    <End Role="City" Type="Self.City" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Province">
+        <PropertyRef Name="ProvinceID" />
+      </Principal>
+      <Dependent Role="City">
+        <PropertyRef Name="ProvinceID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__OnlineSal__CityI__4222D4EF">
+    <End Role="City" Type="Self.City" Multiplicity="1" />
+    <End Role="OnlineSale" Type="Self.OnlineSale" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="City">
+        <PropertyRef Name="CityID" />
+      </Principal>
+      <Dependent Role="OnlineSale">
+        <PropertyRef Name="CityID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__OnsiteSal__CityI__44FF419A">
+    <End Role="City" Type="Self.City" Multiplicity="1" />
+    <End Role="OnsiteSale" Type="Self.OnsiteSale" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="City">
+        <PropertyRef Name="CityID" />
+      </Principal>
+      <Dependent Role="OnsiteSale">
+        <PropertyRef Name="CityID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="CarDBEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Cars" EntityType="Self.Car" />
+    <EntitySet Name="CarPrices" EntityType="Self.CarPrice" />
+    <EntitySet Name="Cities" EntityType="Self.City" />
+    <EntitySet Name="OnlineSales" EntityType="Self.OnlineSale" />
+    <EntitySet Name="OnsiteSales" EntityType="Self.OnsiteSale" />
+    <EntitySet Name="Provinces" EntityType="Self.Province" />
+    <AssociationSet Name="FK__CarPrice__CarID__3F466844" Association="Self.FK__CarPrice__CarID__3F466844">
+      <End Role="Car" EntitySet="Cars" />
+      <End Role="CarPrice" EntitySet="CarPrices" />
+    </AssociationSet>
+    <AssociationSet Name="FK__CarPrice__CityID__3E52440B" Association="Self.FK__CarPrice__CityID__3E52440B">
+      <End Role="City" EntitySet="Cities" />
+      <End Role="CarPrice" EntitySet="CarPrices" />
+    </AssociationSet>
+    <AssociationSet Name="FK__City__ProvinceID__3B75D760" Association="Self.FK__City__ProvinceID__3B75D760">
+      <End Role="Province" EntitySet="Provinces" />
+      <End Role="City" EntitySet="Cities" />
+    </AssociationSet>
+    <AssociationSet Name="FK__OnlineSal__CityI__4222D4EF" Association="Self.FK__OnlineSal__CityI__4222D4EF">
+      <End Role="City" EntitySet="Cities" />
+      <End Role="OnlineSale" EntitySet="OnlineSales" />
+    </AssociationSet>
+    <AssociationSet Name="FK__OnsiteSal__CityI__44FF419A" Association="Self.FK__OnsiteSal__CityI__44FF419A">
+      <End Role="City" EntitySet="Cities" />
+      <End Role="OnsiteSale" EntitySet="OnsiteSales" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
